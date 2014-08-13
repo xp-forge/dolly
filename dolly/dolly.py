@@ -20,6 +20,7 @@ class Dolly:
 	not_cloned = []
 	unpushed = []
 	changes = []
+	warnings = []
 
 	def __init__(self):
 		parser = argparse.ArgumentParser()
@@ -100,6 +101,11 @@ class Dolly:
 					print '[{0}] {1}'.format(change['repo']['name'], change['change'])
 			else:
 				terminal.ok('No uncomitted changes')
+			print ''
+			if len(Dolly.warnings) > 0:
+				terminal.warning('Some errors occured')
+				for warning in Dolly.warnings:
+					print warning
 
 def main():
 

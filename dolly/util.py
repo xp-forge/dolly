@@ -6,12 +6,16 @@ import project
 import dolly
 import terminal
 import sys
+import os
 
 def isGitRepo(repo):
 	return repo['remote'].endswith('.git')
 
 def isSvnCheckout(repo):
     return os.path.exists(repo['local'] + '/.svn')
+
+def isGitCheckout(repo):
+    return os.path.exists(repo['local'] + '/.git')
 
 def executeCommand(command, cwd=None):
 	proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
@@ -29,6 +33,7 @@ def executeCommand(command, cwd=None):
 		terminal.error(stdout)
 		terminal.error(stderr)
 	return {'returncode': returncode, 'stdout': stdout, 'stderr': stderr}
+
 
 def printStatus(repo, count=True):
 	if dolly.Dolly.verbose or count==False:
