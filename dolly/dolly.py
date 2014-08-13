@@ -75,8 +75,8 @@ class Dolly:
 		project.Project.projects = []
 
 	def printSummary(self):
+		print '\n'
 		if self.args.command in ['status', 'st']:
-			print '\n'
 			terminal.blue('---SUMMARY---')
 			print ''
 			if len(Dolly.not_cloned) > 0:
