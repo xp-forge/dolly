@@ -27,7 +27,7 @@ class Dolly:
 		parser.add_argument("-v", "--verbose", action="store_true", help="Verbose Output")
 		parser.add_argument("-r", "--rootdir", help="Clone repos relative to this path", default=os.path.expanduser('~/dev'))
 		parser.add_argument("-c", "--config", help="Specify your dolly.yml")
- 
+
 		self.args = parser.parse_args()
 		Dolly.verbose = self.args.verbose
 		Dolly.rootdir = self.args.rootdir
@@ -95,3 +95,19 @@ class Dolly:
 			else:
 				terminal.ok('No uncomitted changes')
 
+def main():
+
+	banner=r"""                    
+         _     ,--.      |    |         
+      _-(_)-   |   |,---.|    |    ,   .
+    `(___)     |   ||   ||    |    |   |
+     // \\     `--' `---'`---'`---'`---|
+                                   `---'
+"""
+
+	print banner
+	cmd = Dolly()
+	cmd.run()
+
+if __name__ == "__main__" :
+	main()

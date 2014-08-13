@@ -7,11 +7,10 @@ setup(
 	packages = ['dolly'],
 	version = '0.0.2',
 	install_requires=['pyyaml', 'argparse'],
-	entry_points="""
-	[console_scripts]
-	dolly = dolly.__main__
-	dly = dolly.__main__
-	dollz = dolly.__main__
-	dlz = dolly.__main__
-	"""
+	entry_points={
+		'console_scripts': [
+			'dolly = dolly.dolly:main',
+			'dly = dolly.dolly:main'
+		]
+	}
 )
