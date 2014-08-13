@@ -1,0 +1,34 @@
+games:
+  description: "HTML5 / JS games"
+  post_update: "echo $(date) > /tmp/games"
+  tree:
+    games/html/js:
+      - '2048': https://github.com/gabrielecirulli/2048.git
+design-essentials:
+  description: "GitHub featured"
+  tree:
+    design/html/js:
+      - flint: https://github.com/pengwynn/flint
+      - normalize: https://github.com/necolas/normalize.css
+html:
+  description: "Stuff"
+  tree:
+    design/basic:
+      - moderinzr: https://github.com/Modernizr/Modernizr.git
+
+gameshtml:
+  description: "TL;DW"
+  includes:
+    - html
+    - games
+
+default:
+  description: "TL;DW"
+  includes:
+    - design-essentials
+    - gameshtml
+  tree:
+    foo/bar:
+      - testproj: git@git.1and1.org:lbentrup/automation-tools.git
+    bar/foo:
+      - clumsybird: https://github.com/ellisonleao/clumsy-bird.git
