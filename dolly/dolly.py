@@ -28,7 +28,7 @@ class Dolly:
 		parser.add_argument("-v", "--verbose", action="store_true", help="Verbose Output")
 		parser.add_argument("-r", "--rootdir", help="Clone repos relative to this path", default=os.path.expanduser('~/dev'))
 		parser.add_argument("-c", "--config", help="Specify your dolly.yml")
-
+		self.parser = parser
 		self.args = parser.parse_args()
 		Dolly.verbose = self.args.verbose
 		Dolly.rootdir = self.args.rootdir
@@ -63,6 +63,9 @@ class Dolly:
 			visitor = v_list.List()
 		elif command in ['install', 'in']:
 			visitor = v_install.Install()
+		elif command in ['help', 'h']:
+			self.parser.print_help()
+			sys.exit(0)
 		else:
 			print 'Invalid command'
 			sys.exit(0);
