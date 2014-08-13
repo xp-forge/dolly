@@ -6,6 +6,7 @@ import v_list
 import v_count
 import v_update
 import v_status
+import v_install
 import config
 import os
 import sys
@@ -60,6 +61,8 @@ class Dolly:
 			visitor = v_update.Update()
 		elif command in ['list', 'lst']:
 			visitor = v_list.List()
+		elif command in ['install', 'in']:
+			visitor = v_install.Install()
 		else:
 			print 'Invalid command'
 			sys.exit(0);
