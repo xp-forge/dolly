@@ -24,6 +24,7 @@ def executeCommand(command, cwd=None):
 	stdout = proc.stdout.read()
 	stderr = proc.stderr.read()
 	if not returncode == 0:
+		print ''
 		terminal.error('Error while executing command "{0}"'.format(command))
 		terminal.error(stdout)
 		terminal.error(stderr)
