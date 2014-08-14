@@ -11,6 +11,27 @@
 
 Dolly manages multiple Git and Svn repos.
 
+## Usage
+```
+dolly [-h] [-v] [-r ROOTDIR] [-c CONFIG] command [project]
+```
+
+Dolly can be run in the command line with `dolly` or `dly`.
+
+It takes a command argument and an optional project argument.
+Valid commands are:
+
+* help to print the help menu
+* list to list the repositories of the specified project (and all included projects)
+* status to get uncommitted changes and unpushed commits
+* update to pull and clone
+* install to clone repositories that aren't yet on disk
+
+The action will run for every repository in the specified projects tree and all included projects.
+
+If no project parameter is given Dolly will look for a `default` project.
+
+
 ## Config
 
 The config file can be specified with the `-c` parameter.
@@ -55,4 +76,8 @@ default:
       - clumsybird: https://github.com/ellisonleao/clumsy-bird.git
 ```
 
-In the example the repo '2048' will be placed in `$ROOT_DIR/games/html/js`
+In the example the repo '2048' will be placed in `$ROOT_DIR/games/html/js`.
+
+The `default` project also includes the `design-essentials` and `html` projects. So when the `default` project is processed, all of the repos in this config file will be processed.
+
+If a project is included multiple times, it is only processed once.
