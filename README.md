@@ -14,7 +14,7 @@ Dolly manages multiple Git and Svn repos.
 ## Config
 
 The config file can be specified with the `-c` parameter.
-If no file is specified it looks in `~/.dolly.yml` and `/etc/dolly.yml`
+If no file is specified it looks in `~/.dolly.yml` and `/etc/dolly/dolly.yml`
 (in that order)
 
 ### Example
