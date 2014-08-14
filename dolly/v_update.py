@@ -28,6 +28,10 @@ class Update:
 			self.cloneSvn(repo)
 
 	def pull(self, repo):
+		if not util.checkRemote(repo):
+			error = "{0} has a different remote on disk than in config".format(repo['local'])
+			terminal.error("\n" + error)
+			dolly.Dolly.warnings.append(error)
 		if util.isGitRepo(repo):
 			self.pullGit(repo)
 		else:

@@ -45,3 +45,12 @@ def printStatus(repo, count=True):
 	else:
 		terminal.clear_line()
 		terminal.progress_bar(project.Project.projectCount, project.Project.currentProj, 30, repo['name'])
+
+def checkRemote(repo):
+	command = ''
+	if isGitCheckout(repo):
+		command = 'git remote -v'
+	else:
+		command = 'svn info '
+	result = executeCommand(command, cwd=repo['local'])
+	return (repo['remote'] in result['stdout']) or (result['returncode'] != 0)

@@ -18,6 +18,10 @@ class Status:
 		if not os.path.exists(repo['local']):
 			dolly.Dolly.not_cloned.append(repo)
 			return
+		if not util.checkRemote(repo):
+			error = "{0} has a different remote on disk than in config".format(repo['local'])
+			terminal.error("\n" + error)
+			dolly.Dolly.warnings.append(error)
 		if util.isGitRepo(repo):
 			self.statusGit(repo)
 		else:
@@ -25,8 +29,8 @@ class Status:
 
 	def statusGit(self, repo):
 		if not util.isGitCheckout(repo):
-			error = "\n{0} is a Git repo in config file but not a Git checkout on disk".format(repo['local'])
-			terminal.error(error)
+			error = "{0} is a Git repo in config file but not a Git checkout on disk".format(repo['local'])
+			terminal.error("\n" + error)
 			dolly.Dolly.warnings.append(error)
 			return
 		result = util.executeCommand('git status -s', cwd=repo['local'])
@@ -41,8 +45,8 @@ class Status:
 
 	def statusSvn(self, repo):
 		if not util.isSvnCheckout(repo):
-			error = "\n{0} is a Svn repo in config file but not a Svn checkout on disk".format(repo['local'])
-			terminal.error(error)
+			error = "{0} is a Svn repo in config file but not a Svn checkout on disk".format(repo['local'])
+			terminal.error("\n" + error)
 			dolly.Dolly.warnings.append(error)
 			return
 		result = util.executeCommand('svn status', cwd=repo['local'])
