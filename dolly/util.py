@@ -18,15 +18,13 @@ def isGitCheckout(repo):
     return os.path.exists(repo['local'] + '/.git')
 
 def executeCommand(command, cwd=None):
-	proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
+	proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, bufsize=0)
 	if dolly.Dolly.verbose:
 		print ''
 		for line in iter(proc.stdout.readline, ''):
 			sys.stdout.write(line)
-	proc.wait()
+	stdout, stderr = proc.communicate()
 	returncode = proc.returncode
-	stdout = proc.stdout.read()
-	stderr = proc.stderr.read()
 	if not returncode == 0:
 		print ''
 		terminal.error('Error while executing command "{0}"'.format(command))
