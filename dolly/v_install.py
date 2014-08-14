@@ -29,4 +29,4 @@ class Install:
 		result = util.executeCommand('git clone {0} {1}'.format(repo['remote'], repo['local']))
 
 	def cloneSvn(self, repo):
-		result = util.executeCommand('svn checkout {0} {1}'.format(repo['remote'], repo['local']))
+		result = util.executeCommand('svn checkout --config-option servers:global:store-plaintext-passwords=yes {0} {1}'.format(repo['remote'], repo['local']))
