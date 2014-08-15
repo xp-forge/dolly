@@ -7,6 +7,7 @@ import v_count
 import v_update
 import v_status
 import v_install
+import v_list_dirs
 import config
 import os
 import sys
@@ -36,6 +37,8 @@ class Dolly:
 		self.startproject = None
 
 	def run(self):
+		if not self.args.command == 'list-dirs':
+			self.banner()
 		config_system = '/etc/dolly/dolly.yml'
 		config_user = os.path.expanduser('~/.dolly.yml')
 		if self.args.config:
@@ -67,6 +70,8 @@ class Dolly:
 		elif command in ['help', 'h']:
 			self.parser.print_help()
 			sys.exit(0)
+		elif command in ['list-dirs']:
+			visitor = v_list_dirs.ListDirs()
 		else:
 			print 'Invalid command'
 			sys.exit(0);
@@ -106,18 +111,20 @@ class Dolly:
 				terminal.warning('Some errors occured')
 				for warning in Dolly.warnings:
 					print warning
-
-def main():
-
-	banner=r"""                    
+	def banner(self):
+		banner=r"""                    
          _     ,--.      |    |         
       _-(_)-   |   |,---.|    |    ,   .
     `(___)     |   ||   ||    |    |   |
      // \\     `--' `---'`---'`---'`---|
                                    `---'
-"""
+	"""
 
-	print banner
+		print banner
+
+def main():
+
+
 	cmd = Dolly()
 	cmd.run()
 
