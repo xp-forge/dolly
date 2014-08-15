@@ -4,6 +4,8 @@
 import os
 import util
 import project
+import terminal
+import dolly
 
 class Update:
 	def visit(self, host):

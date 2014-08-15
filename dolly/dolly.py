@@ -107,10 +107,10 @@ class Dolly:
 			else:
 				terminal.ok('No uncomitted changes')
 			print ''
-			if len(Dolly.warnings) > 0:
-				terminal.warning('Some errors occured')
-				for warning in Dolly.warnings:
-					print warning
+		if len(Dolly.warnings) > 0:
+			terminal.warning('Some errors occured')
+			for warning in Dolly.warnings:
+				print warning
 	def banner(self):
 		banner=r"""                    
          _     ,--.      |    |         

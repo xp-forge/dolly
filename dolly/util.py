@@ -30,6 +30,7 @@ def executeCommand(command, cwd=None):
 		terminal.error('Error while executing command "{0}"'.format(command))
 		terminal.error(stdout)
 		terminal.error(stderr)
+		dolly.Dolly.warnings.append('Error while executing command "{0}" in "{1}"'.format(command, cwd))
 	return {'returncode': returncode, 'stdout': stdout, 'stderr': stderr}
 
 
