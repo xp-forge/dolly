@@ -21,12 +21,12 @@ Dolly can be run in the command line with `dolly` or `dly`.
 It takes a command argument and an optional project argument.
 Valid commands are:
 
-* help to print the help menu
-* list to list the repositories of the specified project (and all included projects)
-* status to get uncommitted changes and unpushed commits
-* update to pull and clone
-* install to clone repositories that aren't yet on disk
-* list-dirs to print all local repo paths (useful in scripts)
+* `help` to print the help menu
+* `list` to list the repositories of the specified project (and all included projects)
+* `status` to get uncommitted changes and unpushed commits
+* `update` to pull and clone
+* `install` to clone repositories that aren't yet on disk
+* `list-dirs` to print all local repo paths (useful in scripts)
 
 The action will run for every repository in the specified projects tree and all included projects.
 
