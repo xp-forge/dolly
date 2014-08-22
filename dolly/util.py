@@ -19,19 +19,22 @@ def isGitCheckout(repo):
 
 def executeCommand(command, cwd=None):
 	proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, bufsize=0)
+	output = ''
 	if dolly.Dolly.verbose:
 		print ''
 		for line in iter(proc.stdout.readline, ''):
 			sys.stdout.write(line)
+			output += line
 	stdout, stderr = proc.communicate()
+	output += stdout
 	returncode = proc.returncode
 	if not returncode == 0:
 		print ''
 		terminal.error('Error while executing command "{0}"'.format(command))
-		terminal.error(stdout)
+		terminal.error(output)
 		terminal.error(stderr)
 		dolly.Dolly.warnings.append('Error while executing command "{0}" in "{1}"'.format(command, cwd))
-	return {'returncode': returncode, 'stdout': stdout, 'stderr': stderr}
+	return {'returncode': returncode, 'stdout': output, 'stderr': stderr}
 
 
 def printStatus(repo, count=True):
@@ -52,4 +55,6 @@ def checkRemote(repo):
 	else:
 		command = 'svn info '
 	result = executeCommand(command, cwd=repo['local'])
+	print repo
+	print result
 	return (repo['remote'] in result['stdout']) or (result['returncode'] != 0)
