@@ -45,3 +45,10 @@ class Config:
 
 		return project.Project(name, description, tree, includes, self, post_update)
 
+	def addRepo(self, remote, local, project):
+		self.data[project]['tree'][os.path.relpath(os.path.abspath(os.path.join(local, '..')), self.rootdir)].append({os.path.basename(os.path.normpath(local)): remote})
+		#self.data[project]['tree'][os.path.relpath(os.path.abspath(os.path.join(local, '..')), self.rootdir)][1] = remote
+
+	def dump(self):
+		print yaml.dump(self.data)
+
