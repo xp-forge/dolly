@@ -55,6 +55,4 @@ def checkRemote(repo):
 	else:
 		command = 'svn info '
 	result = executeCommand(command, cwd=repo['local'])
-	print repo
-	print result
 	return (repo['remote'] in result['stdout']) or (result['returncode'] != 0)
