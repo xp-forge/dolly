@@ -14,6 +14,7 @@ import sys
 import project
 import terminal
 import util
+import pkg_resources
 
 class Dolly:
 	verbose = False
@@ -72,6 +73,9 @@ class Dolly:
 			sys.exit(0)
 		elif command in ['list-dirs']:
 			visitor = v_list_dirs.ListDirs()
+		elif command in ['version']:
+			print "Dolly version: " + pkg_resources.require("Dolly")[0].version
+			sys.exit(0)
 		else:
 			print 'Invalid command'
 			sys.exit(0);
