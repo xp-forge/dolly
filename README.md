@@ -82,3 +82,23 @@ In the example the repo '2048' will be placed in `$ROOT_DIR/games/html/js`.
 The `default` project also includes the `design-essentials` and `html` projects. So when the `default` project is processed, all of the repos in this config file will be processed.
 
 If a project is included multiple times, it is only processed once.
+
+## Installation
+
+Dolly can be installed using pip with
+
+```bash
+pip install dolly    # Add --upgrade to update dolly
+```
+
+This will also install the following dependencies:
+* argparse
+* pyyaml
+
+To install from this git repo:
+
+```
+git clone https://github.com/xp-forge/dolly.git
+cd dolly
+sudo python setup.py install
+```
