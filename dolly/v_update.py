@@ -6,13 +6,18 @@ import util
 import project
 import terminal
 import dolly
+from multiprocessing import Pool
+
+def process_repo((upd, repo)):
+	upd.update(repo)
 
 class Update:
 	def visit(self, host):
+		Pool(5).map(process_repo, zip([self] * len(host.tree), host.tree))
+
 		for repo in host.tree:
 			project.Project.currentProj += 1
 			util.printStatus(repo)
-			self.update(repo)
 
 		if host.post_update:
 			util.executeCommand(host.post_update)
