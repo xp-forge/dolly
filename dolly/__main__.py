@@ -3,6 +3,7 @@
 # 
 
 import dolly
+import sys
 
 banner=r"""                       
      _     ,--.      |    |         
@@ -13,5 +14,10 @@ banner=r"""
 """
 
 print banner
-cmd = dolly.Dolly()
-cmd.run()
+
+try:
+	cmd = dolly.Dolly()
+	cmd.run()
+except KeyboardInterrupt:
+	# Don't print a stacktrace.
+	sys.exit(1)

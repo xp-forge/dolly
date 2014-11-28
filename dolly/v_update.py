@@ -2,18 +2,25 @@
 # -*- coding: utf-8 -*-
 # 
 import os
+import sys
 import util
 import project
 import terminal
-import dolly
+import signal
 from multiprocessing import Pool
+
+import dolly
+
+def init_worker():
+	# Ignore SIGINTs in worker processes.
+	signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 def process_repo(upd, repo):
 	upd.update(repo)
 
 class Update:
 	def visit(self, host):
-		pool = Pool(5)
+		pool = Pool(5, init_worker)
 
 		def pr(repo):
 			return pool.apply_async(process_repo, (self, repo))
@@ -24,7 +31,9 @@ class Update:
 			repo, result = r
 			project.Project.currentProj += 1
 			util.printStatus(repo)
-			result.wait()
+			# Workaround to Python issue 8296 where a SIGINT will
+			# lock up the process when no wait time is given.
+			result.wait(9999999)
 
 		if host.post_update:
 			util.executeCommand(host.post_update)
