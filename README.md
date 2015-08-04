@@ -77,6 +77,22 @@ default:
       - clumsybird: https://github.com/ellisonleao/clumsy-bird.git
 ```
 
+### Extended repository syntax
+At the moment, the properties "tag" and "branch" are only supported by git.
+```
+...
+tree;
+  - name: 'modernizer'
+    repository: https://github.com/Modernizr/Modernizr.git
+    tag: v2.8.1
+    post_update: echo done
+  - name: 'modernizer back'
+    repository: https://github.com/Modernizr/Modernizr.git
+    branch: tag
+    post_update: echo done
+...
+```
+
 In the example the repo '2048' will be placed in `$ROOT_DIR/games/html/js`.
 
 The `default` project also includes the `design-essentials` and `html` projects. So when the `default` project is processed, all of the repos in this config file will be processed.
