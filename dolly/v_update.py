@@ -67,7 +67,7 @@ class Update:
 		if repo['tag'] != '':
 			branch = repo['tag']
 		if branch != '':
-			 result = util.executeCommand('git clone --branch {2} {0} {1}  > test.txt'.format(
+			 result = util.executeCommand('git clone --branch {2} {0} {1}'.format(
 				 repo['remote'],
 				 repo['local'],
 				 branch
