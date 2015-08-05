@@ -86,9 +86,9 @@ tree;
     repository: https://github.com/Modernizr/Modernizr.git
     tag: v2.8.1
     post_update: echo done
-  - name: 'modernizer back'
+  - name: 'modernizerback'
     repository: https://github.com/Modernizr/Modernizr.git
-    branch: tag
+    branch: back
     post_update: echo done
 ...
 ```
