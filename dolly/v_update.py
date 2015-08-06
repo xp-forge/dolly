@@ -67,20 +67,20 @@ class Update:
 		if repo['tag'] != '':
 			branch = repo['tag']
 		if branch != '':
-			 result = util.executeCommand('git clone --branch {2} {0} {1}'.format(
+			 result = util.executeCommand("git clone --branch '{2}' '{0}' '{1}'".format(
 				 repo['remote'],
 				 repo['local'],
 				 branch
 			 ))
 		else:
-			result = util.executeCommand('git clone {0} {1}'.format(repo['remote'], repo['local']))
+			result = util.executeCommand("git clone '{0}' '{1}'".format(repo['remote'], repo['local']))
 
 	def cloneSvn(self, repo):
-		result = util.executeCommand('svn checkout --config-option servers:global:store-plaintext-passwords=yes {0} {1}'.format(repo['remote'], repo['local']))
+		result = util.executeCommand("svn checkout --config-option servers:global:store-plaintext-passwords=yes '{0}' '{1}'".format(repo['remote'], repo['local']))
 
 	def pullGit(self, repo):
 		if repo['tag'] != '':
-			result = util.executeCommand('git checkout {0}'.format(repo['tag']), cwd=repo['local'])
+			result = util.executeCommand("git checkout '{0}'".format(repo['tag']), cwd=repo['local'])
 		else:
 			result = util.executeCommand('git pull --ff-only', cwd=repo['local'])
 
