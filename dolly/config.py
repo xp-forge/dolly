@@ -19,10 +19,30 @@ class Config:
 		output = []
 		for directory, repos in project.iteritems():
 			for repository in repos:
-				key = list(repository)[0]
-				remote = repository[key]
+				tag = ''
+				branch = ''
+				post_update = ''
+				if 'repository' in repository:
+					key = repository['name']
+					remote = repository['repository']
+					if 'tag' in repository:
+						tag = repository['tag']
+					if 'branch' in repository:
+						branch = repository['branch']
+					if 'post_update' in repository:
+						post_update = repository['post_update']
+				else:
+					key = list(repository)[0]
+					remote = repository[key]
 				local = os.path.join(self.rootdir, directory, key)
-				output.append({'local': local, 'remote': remote, 'name': key})
+				output.append({
+					'local': local,
+					'remote': remote,
+					'name': key,
+					'tag': tag,
+					'branch': branch,
+					'post_update': post_update
+				})
 		return output
 
 	def parse(self, name):

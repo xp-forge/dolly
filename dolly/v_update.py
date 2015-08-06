@@ -43,6 +43,8 @@ class Update:
 			self.pull(repo)
 		else:
 			self.clone(repo)
+		if repo['post_update'] != '':
+			util.executeCommand(repo['post_update'], cwd=repo['local'])
 
 	def clone(self, repo):
 		if util.isGitRepo(repo):
@@ -61,13 +63,26 @@ class Update:
 			self.pullSvn(repo)
 
 	def cloneGit(self, repo):
-		result = util.executeCommand('git clone {0} {1}'.format(repo['remote'], repo['local']))
+		branch = repo['branch']
+		if repo['tag'] != '':
+			branch = repo['tag']
+		if branch != '':
+			 result = util.executeCommand('git clone --branch {2} {0} {1}'.format(
+				 repo['remote'],
+				 repo['local'],
+				 branch
+			 ))
+		else:
+			result = util.executeCommand('git clone {0} {1}'.format(repo['remote'], repo['local']))
 
 	def cloneSvn(self, repo):
 		result = util.executeCommand('svn checkout --config-option servers:global:store-plaintext-passwords=yes {0} {1}'.format(repo['remote'], repo['local']))
 
 	def pullGit(self, repo):
-		result = util.executeCommand('git pull --ff-only', cwd=repo['local'])
+		if repo['tag'] != '':
+			result = util.executeCommand('git checkout {0}'.format(repo['tag']), cwd=repo['local'])
+		else:
+			result = util.executeCommand('git pull --ff-only', cwd=repo['local'])
 
 	def pullSvn(self, repo):
 		result = util.executeCommand('svn update', cwd=repo['local'])
