@@ -47,7 +47,7 @@ class Config:
 
 	def parse(self, name):
 		if not (name in self.data):
-			terminal.error("Project doesn't exist in config file")
+			terminal.error("Project " + name + " doesn't exist in config file")
 			sys.exit(0)
 		proj = self.data[name]
 		tree = []
