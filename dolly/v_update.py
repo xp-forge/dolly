@@ -46,10 +46,11 @@ class Update:
 
 	def clone(self, repo):
 		if util.isGitRepo(repo):
-			self.cloneGit(repo)
+			result = self.cloneGit(repo)
 		else:
-			self.cloneSvn(repo)
-		self.runPostUpdateCommand(repo)
+			result = self.cloneSvn(repo)
+		if result['returncode'] == 0:
+			self.runPostUpdateCommand(repo)
 
 	def pull(self, repo):
 		if not util.checkRemote(repo):
@@ -58,10 +59,11 @@ class Update:
 			dolly.Dolly.warnings.append(error)
 
 		if util.isGitRepo(repo):
-			self.pullGit(repo)
+			result = self.pullGit(repo)
 		else:
-			self.pullSvn(repo)
-		self.runPostUpdateCommand(repo)
+			result = self.pullSvn(repo)
+		if result['returncode'] == 0 and 'Fast-forward' in result['stdout']:
+			self.runPostUpdateCommand(repo)
 
 	def cloneGit(self, repo):
 		branch = repo['branch']
@@ -75,18 +77,21 @@ class Update:
 			 ))
 		else:
 			result = util.executeCommand("git clone '{0}' '{1}'".format(repo['remote'], repo['local']))
+		return result
 
 	def cloneSvn(self, repo):
 		result = util.executeCommand("svn checkout --config-option servers:global:store-plaintext-passwords=yes '{0}' '{1}'".format(repo['remote'], repo['local']))
+		return result
 
 	def pullGit(self, repo):
 		if repo['tag'] != '':
 			result = util.executeCommand("git checkout '{0}'".format(repo['tag']), cwd=repo['local'])
 		else:
 			result = util.executeCommand('git pull --ff-only', cwd=repo['local'])
+		return result
 
 	def pullSvn(self, repo):
-		result = util.executeCommand('svn update', cwd=repo['local'])
+		return util.executeCommand('svn update', cwd=repo['local'])
 
 	def runPostUpdateCommand(self, repo):
 		if repo['post_update'] != '':
