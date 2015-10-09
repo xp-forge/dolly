@@ -43,24 +43,25 @@ class Update:
 			self.pull(repo)
 		else:
 			self.clone(repo)
-		if repo['post_update'] != '':
-			util.executeCommand(repo['post_update'], cwd=repo['local'])
 
 	def clone(self, repo):
 		if util.isGitRepo(repo):
 			self.cloneGit(repo)
 		else:
 			self.cloneSvn(repo)
+		self.runPostUpdateCommand(repo)
 
 	def pull(self, repo):
 		if not util.checkRemote(repo):
 			error = "{0} has a different remote on disk than in config".format(repo['local'])
 			terminal.error("\n" + error)
 			dolly.Dolly.warnings.append(error)
+
 		if util.isGitRepo(repo):
 			self.pullGit(repo)
 		else:
 			self.pullSvn(repo)
+		self.runPostUpdateCommand(repo)
 
 	def cloneGit(self, repo):
 		branch = repo['branch']
@@ -86,3 +87,7 @@ class Update:
 
 	def pullSvn(self, repo):
 		result = util.executeCommand('svn update', cwd=repo['local'])
+
+	def runPostUpdateCommand(self, repo):
+		if repo['post_update'] != '':
+			util.executeCommand(repo['post_update'], cwd=repo['local'])
