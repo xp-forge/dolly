@@ -10,6 +10,7 @@ import signal
 from multiprocessing import Pool
 
 import dolly
+import repository
 
 def init_worker():
 	# Ignore SIGINTs in worker processes.
@@ -39,59 +40,29 @@ class Update:
 			util.executeCommand(host.post_update)
 	
 	def update(self, repo):
+		r = repository.create(repo)
 		if os.path.exists(repo['local']):
-			self.pull(repo)
+			self.pull(r)
 		else:
-			self.clone(repo)
+			self.clone(r)
 
 	def clone(self, repo):
-		if util.isGitRepo(repo):
-			result = self.cloneGit(repo)
-		else:
-			result = self.cloneSvn(repo)
+		result = repo.clone()
 		if result['returncode'] == 0:
 			self.runPostUpdateCommand(repo)
 
 	def pull(self, repo):
-		if not util.checkRemote(repo):
-			error = "{0} has a different remote on disk than in config".format(repo['local'])
+		if not util.checkRemote(repo.repo):
+			error = "{0} has a different remote on disk than in config".format(repo.repo['local'])
 			terminal.error("\n" + error)
 			dolly.Dolly.warnings.append(error)
 
-		if util.isGitRepo(repo):
-			result = self.pullGit(repo)
-		else:
-			result = self.pullSvn(repo)
+		result = repo.pull()
+		# TODO: Condition is wrong.
 		if result['returncode'] == 0 and 'Fast-forward' in result['stdout']:
 			self.runPostUpdateCommand(repo)
 
-	def cloneGit(self, repo):
-		branch = repo['branch']
-		if repo['tag'] != '':
-			branch = repo['tag']
-		if branch != '':
-			 result = util.executeCommand("git clone --branch '{2}' '{0}' '{1}'".format(
-				 repo['remote'],
-				 repo['local'],
-				 branch
-			 ))
-		else:
-			result = util.executeCommand("git clone '{0}' '{1}'".format(repo['remote'], repo['local']))
-		return result
 
-	def cloneSvn(self, repo):
-		result = util.executeCommand("svn checkout --config-option servers:global:store-plaintext-passwords=yes '{0}' '{1}'".format(repo['remote'], repo['local']))
-		return result
-
-	def pullGit(self, repo):
-		if repo['tag'] != '':
-			result = util.executeCommand("git checkout '{0}'".format(repo['tag']), cwd=repo['local'])
-		else:
-			result = util.executeCommand('git pull --ff-only', cwd=repo['local'])
-		return result
-
-	def pullSvn(self, repo):
-		return util.executeCommand('svn update', cwd=repo['local'])
 
 	def runPostUpdateCommand(self, repo):
 		if repo['post_update'] != '':
