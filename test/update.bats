@@ -12,7 +12,7 @@ teardown() {
 }
 
 @test "dolly update clones repositories" {
-	run $DOLLY -c "$CONFIGS/simple.yaml" install
+	run $DOLLY -c "$CONFIGS/simple.yaml" update
 	[ "$status" -eq 0 ]
 	[[ -d "$DOLLY_ROOT"/repositories/repo1 ]]
 	[[ -d "$DOLLY_ROOT"/repositories/repo2 ]]
@@ -20,7 +20,7 @@ teardown() {
 
 @test "dolly update pulls existing repositories" {
 	# First, install all repositories.
-	run $DOLLY -c "$CONFIGS/simple.yaml" install
+	run $DOLLY -c "$CONFIGS/simple.yaml" update
 	[ "$status" -eq 0 ]
 	# Reset one of them.
 	(cd "$DOLLY_ROOT"/repositories/repo2 && git reset --hard HEAD^)
@@ -34,5 +34,20 @@ teardown() {
 	[[ -d "$DOLLY_ROOT"/repositories/repo1 ]]
 	[[ -d "$DOLLY_ROOT"/repositories/repo2 ]]
 	# ...and that the file is there now.
-	[[ ! -e "$DOLLY_ROOT"/repositories/repo2/e ]]
+	[[ -e "$DOLLY_ROOT"/repositories/repo2/e ]]
+}
+
+@test "dolly update runs the project's post_update command after cloning" {
+	run $DOLLY -c "$CONFIGS/post_update.yaml" update
+	[ "$status" -eq 0 ]
+	[[ -e "$FIXTURES"/post_update ]]
+}
+
+@test "dolly update does not run a repository's post_update command when nothing is updated" {
+	$DOLLY -c "$CONFIGS/repo_post_update.yaml" update
+	[[ -e "$DOLLY_ROOT"/repositories/repo1/post_update ]]
+	rm "$DOLLY_ROOT"/repositories/repo1/post_update
+
+	$DOLLY -c "$CONFIGS/repo_post_update.yaml" update
+	[[ ! -e "$DOLLY_ROOT"/repositories/repo1/post_update ]]
 }

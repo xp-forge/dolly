@@ -1,0 +1,8 @@
+default:
+  description: Two test repositories with post_update command.
+  tree:
+    repositories:
+      - name: repo1
+        repository: $FIXTURES/repo1.git
+        post_update: touch post_update
+      - repo2: $FIXTURES/repo2.git
