@@ -57,13 +57,17 @@ class Update:
 			terminal.error("\n" + error)
 			dolly.Dolly.warnings.append(error)
 
+		revision = repo.get_revision()
 		result = repo.pull()
-		# TODO: Condition is wrong.
-		if result['returncode'] == 0 and 'Fast-forward' in result['stdout']:
+
+		# Only run post-update commands when the repository's revision
+		# was updated.
+		if result['returncode'] == 0 and revision != repo.get_revision():
 			self.runPostUpdateCommand(repo)
 
 
 
 	def runPostUpdateCommand(self, repo):
+		repo = repo.repo
 		if repo['post_update'] != '':
 			util.executeCommand(repo['post_update'], cwd=repo['local'])

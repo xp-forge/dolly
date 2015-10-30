@@ -13,6 +13,9 @@ class Repository:
 	@abstractmethod
 	def pull(self): pass
 
+	@abstractmethod
+	def get_revision(self): pass
+
 
 import util
 from svnrepository import SVNRepository

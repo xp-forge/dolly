@@ -21,8 +21,17 @@ class GitRepository(Repository):
 		return result
 
 	def pull(self):
+		repo = self.repo
 		if repo['tag'] != '':
 			result = util.executeCommand("git checkout '{0}'".format(repo['tag']), cwd=repo['local'])
 		else:
 			result = util.executeCommand('git pull --ff-only', cwd=repo['local'])
 		return result
+
+	def get_revision(self):
+		repo = self.repo
+		result = util.executeCommand('git rev-parse HEAD', cwd=repo['local'])
+		if result['returncode'] == 0:
+			return result['stdout']
+		else:
+			return None
