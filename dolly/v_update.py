@@ -52,8 +52,8 @@ class Update:
 			self.runPostUpdateCommand(repo)
 
 	def pull(self, repo):
-		if not util.checkRemote(repo.repo):
-			error = "{0} has a different remote on disk than in config".format(repo.repo['local'])
+		if not util.checkRemote(repo.data):
+			error = "{0} has a different remote on disk than in config".format(repo.data['local'])
 			terminal.error("\n" + error)
 			dolly.Dolly.warnings.append(error)
 
@@ -68,6 +68,6 @@ class Update:
 
 
 	def runPostUpdateCommand(self, repo):
-		repo = repo.repo
+		repo = repo.data
 		if repo['post_update'] != '':
 			util.executeCommand(repo['post_update'], cwd=repo['local'])

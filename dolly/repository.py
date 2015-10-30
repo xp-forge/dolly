@@ -5,7 +5,7 @@ class Repository:
 	__metaclass__ = ABCMeta
 
 	def __init__(self, repo):
-		self.repo = repo
+		self.data = repo
 
 	@abstractmethod
 	def clone(self): pass

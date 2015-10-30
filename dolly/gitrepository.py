@@ -6,7 +6,7 @@ class GitRepository(Repository):
 		super(GitRepository, self).__init__(repo)
 
 	def clone(self):
-		repo = self.repo
+		repo = self.data
 		branch = repo['branch']
 		if repo['tag'] != '':
 			branch = repo['tag']
@@ -21,7 +21,7 @@ class GitRepository(Repository):
 		return result
 
 	def pull(self):
-		repo = self.repo
+		repo = self.data
 		if repo['tag'] != '':
 			result = util.executeCommand("git checkout '{0}'".format(repo['tag']), cwd=repo['local'])
 		else:
@@ -29,7 +29,7 @@ class GitRepository(Repository):
 		return result
 
 	def get_revision(self):
-		repo = self.repo
+		repo = self.data
 		result = util.executeCommand('git rev-parse HEAD', cwd=repo['local'])
 		if result['returncode'] == 0:
 			return result['stdout']
