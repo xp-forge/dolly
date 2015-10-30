@@ -115,6 +115,7 @@ class Dolly:
 			terminal.warning('Some errors occured')
 			for warning in Dolly.warnings:
 				print warning
+			sys.exit(1)
 	def banner(self):
 		banner=r"""                    
          _     ,--.      |    |         
