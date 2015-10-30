@@ -1,5 +1,7 @@
 # Dolly
 
+[![Build Status](https://travis-ci.org/xp-forge/dolly.svg?branch=master)](https://travis-ci.org/xp-forge/dolly)
+
 ```
 
      _     ,--.      |    |
@@ -9,7 +11,7 @@
                                `---'
 ```
 
-Dolly manages multiple Git and Svn repos.
+Dolly manages multiple Git and SVN repos.
 
 ## Usage
 ```
@@ -33,11 +35,11 @@ The action will run for every repository in the specified projects tree and all 
 If no project parameter is given Dolly will look for a `default` project.
 
 
-## Config
+## Configuration
 
 The config file can be specified with the `-c` parameter.
 If no file is specified it looks in `~/.dolly.yml` and `/etc/dolly/dolly.yml`
-(in that order)
+(in that order).
 
 ### Example
 ```
