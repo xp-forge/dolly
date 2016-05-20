@@ -40,7 +40,7 @@ teardown() {
 @test "dolly update runs the project's post_update command after cloning" {
 	run $DOLLY -c "$CONFIGS/post_update.yaml" update
 	assert_success
-	[[ -e "$FIXTURES"/post_update ]]
+	[[ -e "$DOLLY_ROOT"/post_update ]]
 }
 
 @test "dolly update does not run a repository's post_update command when nothing is updated" {

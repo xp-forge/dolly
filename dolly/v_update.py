@@ -52,7 +52,7 @@ class Update(Visitor):
 			result.wait(9999999)
 
 		if host.post_update:
-			self.post_update_pool.apply_async(util.executeCommand, (host.post_update,))
+			self.post_update_pool.apply_async(util.executeCommand, (host.post_update, dolly.Dolly.rootdir))
 
 	def close(self):
 		self.post_update_pool.close()
