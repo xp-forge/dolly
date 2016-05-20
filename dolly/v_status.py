@@ -6,8 +6,9 @@ import util
 import project
 import terminal
 import dolly
+from v_base import Visitor
 
-class Status:
+class Status(Visitor):
 	def visit(self, host):
 		for repo in host.tree:
 			project.Project.currentProj += 1

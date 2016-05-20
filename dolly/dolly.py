@@ -80,6 +80,8 @@ class Dolly:
 			print 'Invalid command'
 			sys.exit(0);
 		self.startproject.accept(visitor)
+		# Finish outstanding work.
+		visitor.close()
 		self.printSummary()
 
 	def countProjects(self):

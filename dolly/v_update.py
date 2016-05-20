@@ -11,6 +11,7 @@ from multiprocessing import Pool
 
 import dolly
 import repository
+from v_base import Visitor
 
 def init_worker():
 	# Ignore SIGINTs in worker processes.
@@ -19,12 +20,26 @@ def init_worker():
 def process_repo(upd, repo):
 	upd.update(repo)
 
-class Update:
+# Visitor for updating repositories.
+#
+# Quick overview of parallelism:
+#  - Projects are processed sequentially.
+#  - Repositories within a project are updated in parallel. This includes
+#    execution of post_update commands.
+#  - Project-level post_update commands are run in parallel.
+class Update(Visitor):
+	def __init__(self):
+		self.post_update_pool = Pool(3, init_worker)
+		self.impl = self.impl()
+
+	def impl(self):
+		return UpdateImpl()
+
 	def visit(self, host):
 		pool = Pool(5, init_worker)
 
 		def pr(repo):
-			return pool.apply_async(process_repo, (self, repo))
+			return pool.apply_async(process_repo, (self.impl, repo))
 
 		results = zip(host.tree, map(pr, host.tree))
 
@@ -37,8 +52,14 @@ class Update:
 			result.wait(9999999)
 
 		if host.post_update:
-			util.executeCommand(host.post_update)
+			self.post_update_pool.apply_async(util.executeCommand, (host.post_update,))
+
+	def close(self):
+		self.post_update_pool.close()
+		self.post_update_pool.join()
 	
+# Separated as Pools can't be moved to subprocesses.
+class UpdateImpl:
 	def update(self, repo):
 		r = repository.create(repo)
 		if os.path.exists(repo['local']):
