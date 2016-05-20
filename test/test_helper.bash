@@ -1,3 +1,6 @@
+load 'test_helper/bats-support/load'
+load 'test_helper/bats-assert/load'
+
 DOLLY_ROOT="$BATS_TMPDIR/dolly_test/dev"
 DOLLY="$BATS_TEST_DIRNAME/../dolly/__main__.py -r $DOLLY_ROOT"
 FIXTURES="$BATS_TEST_DIRNAME/fixtures"
