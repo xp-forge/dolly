@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-class Visitor:
+class Visitor(object):
 	__metaclass__ = ABCMeta
 
 	@abstractmethod

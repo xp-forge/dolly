@@ -31,6 +31,7 @@ class Dolly:
 		parser.add_argument("-v", "--verbose", action="store_true", help="Verbose Output")
 		parser.add_argument("-r", "--rootdir", help="Clone repos relative to this path", default=os.path.expanduser('~/dev'))
 		parser.add_argument("-c", "--config", help="Specify your dolly.yml")
+		parser.add_argument("--no-post-update", action="store_true", help="Don't run post_update commands")
 		self.parser = parser
 		self.args = parser.parse_args()
 		Dolly.verbose = self.args.verbose
@@ -63,11 +64,11 @@ class Dolly:
 		if command in ['status', 'st']:
 			visitor = v_status.Status()
 		elif command in ['update', 'up']:
-			visitor = v_update.Update()
+			visitor = v_update.Update(not self.args.no_post_update)
 		elif command in ['list', 'lst']:
 			visitor = v_list.List()
 		elif command in ['install', 'in']:
-			visitor = v_install.Install()
+			visitor = v_install.Install(not self.args.no_post_update)
 		elif command in ['help', 'h']:
 			self.parser.print_help()
 			sys.exit(0)

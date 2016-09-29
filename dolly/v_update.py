@@ -28,12 +28,14 @@ def process_repo(upd, repo):
 #    execution of post_update commands.
 #  - Project-level post_update commands are run in parallel.
 class Update(Visitor):
-	def __init__(self):
-		self.post_update_pool = Pool(3, init_worker)
+	def __init__(self, run_post_update = True):
+		self.run_post_update = run_post_update
+		if run_post_update:
+			self.post_update_pool = Pool(3, init_worker)
 		self.impl = self.impl()
 
 	def impl(self):
-		return UpdateImpl()
+		return UpdateImpl(self.run_post_update)
 
 	def visit(self, host):
 		pool = Pool(5, init_worker)
@@ -51,15 +53,19 @@ class Update(Visitor):
 			# lock up the process when no wait time is given.
 			result.wait(9999999)
 
-		if host.post_update:
+		if host.post_update and self.run_post_update:
 			self.post_update_pool.apply_async(util.executeCommand, (host.post_update, dolly.Dolly.rootdir))
 
 	def close(self):
-		self.post_update_pool.close()
-		self.post_update_pool.join()
+		if self.run_post_update:
+			self.post_update_pool.close()
+			self.post_update_pool.join()
 	
 # Separated as Pools can't be moved to subprocesses.
-class UpdateImpl:
+class UpdateImpl(object):
+	def __init__(self, run_post_update):
+		self.run_post_update = run_post_update
+
 	def update(self, repo):
 		r = repository.create(repo)
 		if os.path.exists(repo['local']):
@@ -90,5 +96,5 @@ class UpdateImpl:
 
 	def runPostUpdateCommand(self, repo):
 		repo = repo.data
-		if repo['post_update'] != '':
+		if repo['post_update'] != '' and self.run_post_update:
 			util.executeCommand(repo['post_update'], cwd=repo['local'])
