@@ -51,3 +51,10 @@ teardown() {
 	$DOLLY -c "$CONFIGS/repo_post_update.yaml" update
 	[[ ! -e "$DOLLY_ROOT"/repositories/repo1/post_update ]]
 }
+
+@test "dolly update does not run the project's post_update command when passing --no-post-update" {
+	run $DOLLY -c "$CONFIGS/post_update.yaml" --no-post-update update
+	assert_success
+	[[ ! -e "$DOLLY_ROOT"/post_update ]]
+}
+
