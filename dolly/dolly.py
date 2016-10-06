@@ -2,19 +2,23 @@
 # -*- coding: utf-8 -*-
 # 
 import argparse
-import v_list
-import v_count
-import v_update
-import v_status
-import v_install
-import v_list_dirs
 import config
 import os
 import sys
+
+import pkg_resources
 import project
 import terminal
 import util
-import pkg_resources
+
+# Command implementations
+import untracked
+import v_count
+import v_install
+import v_list
+import v_list_dirs
+import v_status
+import v_update
 
 class Dolly:
 	verbose = False
@@ -69,11 +73,14 @@ class Dolly:
 			visitor = v_list.List()
 		elif command in ['install', 'in']:
 			visitor = v_install.Install(not self.args.no_post_update)
+		elif command in ['list-dirs']:
+			visitor = v_list_dirs.ListDirs()
+		elif command in ['untracked']:
+			untracked.cmd(Dolly.rootdir, self.startproject)
+			sys.exit(0)
 		elif command in ['help', 'h']:
 			self.parser.print_help()
 			sys.exit(0)
-		elif command in ['list-dirs']:
-			visitor = v_list_dirs.ListDirs()
 		elif command in ['version']:
 			print "Dolly version: " + pkg_resources.require("Dolly")[0].version
 			sys.exit(0)
