@@ -7,7 +7,7 @@ setup(
 	description='Dolly manages multiple git and svn repos',
 	long_description=open('README.md').read(),
 	packages = ['dolly'],
-	version = '0.3.0',
+	version = '0.4.0',
 	install_requires=['pyyaml', 'argparse'],
 	entry_points={
 		'console_scripts': [
