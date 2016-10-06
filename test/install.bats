@@ -19,10 +19,10 @@ teardown() {
 }
 
 @test "dolly install ignores existing repositories" {
-	mkdir -p "$DOLLY_ROOT"/repositories/repo1 
+	mkdir -p "$DOLLY_ROOT"/repositories/repo1/.git
 	run $DOLLY -c "$CONFIGS/simple.yaml" install
 	assert_success
 	[[ -d "$DOLLY_ROOT"/repositories/repo1 ]]        # Folder exists...
-	[[ ! -d "$DOLLY_ROOT"/repositories/repo1/.git ]] # ...but is still empty.
+	[[ ! -f "$DOLLY_ROOT"/repositories/repo1/.git/index ]] # ...but is still empty.
 	[[ -d "$DOLLY_ROOT"/repositories/repo2 ]]        # This repository is new.
 }
