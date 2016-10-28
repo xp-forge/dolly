@@ -54,7 +54,7 @@ class Update(Visitor):
 			result.wait(9999999)
 
 		if host.post_update and self.run_post_update:
-			self.post_update_pool.apply_async(util.executeCommand, (host.post_update, dolly.Dolly.rootdir))
+			self.post_update_pool.apply_async(util.executeCommand, (host.post_update, dolly.Dolly.rootdir, True, 'Project Post Update: {0}'.format(host.name)))
 
 	def close(self):
 		if self.run_post_update:
@@ -97,4 +97,4 @@ class UpdateImpl(object):
 	def runPostUpdateCommand(self, repo):
 		repo = repo.data
 		if repo['post_update'] != '' and self.run_post_update:
-			util.executeCommand(repo['post_update'], cwd=repo['local'])
+			util.executeCommand(repo['post_update'], cwd=repo['local'], tmux=True, name='Repository Post Update: {0}'.format(repo['name']))
