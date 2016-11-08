@@ -23,6 +23,8 @@ def executeTmuxCommand(command, cwd='.', name=None):
 		return '\033[91m{0}\033[0m'.format(msg)
 	def blue(msg):
 		return '\033[94m{0}\033[0m'.format(msg)
+	def set_title(title): # Sets the tmux pane title.
+		return '\033]2;{0}\033\\\\'.format(title)
 	context = '[{0}] '.format(name) if name != None else ''
 	on_error = red('{0}Command failed, press enter to close'.format(context))
 	# Build the actual command which will be passed to tmux. In the usual case,
@@ -30,7 +32,7 @@ def executeTmuxCommand(command, cwd='.', name=None):
 	# failing commands and shows a message, keeping the window open. We have to
 	# duplicate backslashes to make sure escapes are not interpreted too early.
 	# TODO: Duplicating backslashes is probably not enough for all cases.
-	cmd = "trap 'echo -n \"{0}\"; read; exit' ERR; echo \"{1}\"; {2}".format(on_error, blue(context), command.replace('\\', '\\\\'))
+	cmd = "trap 'echo -n \"{0}\"; read; exit' ERR; echo \"{1}{2}\"; {3}".format(on_error, blue(context), set_title(name) if name != None else '', command.replace('\\', '\\\\'))
 	pane = subprocess.check_output(['tmux', 'split-window', '-Pbd', '-F#{pane_id}', '-l2', '-t{0}'.format(os.getenv('TMUX_PANE', '')), '-c{0}'.format(cwd), cmd])
 	# Poll for completion.
 	while subprocess.check_output(['tmux', 'list-panes', '-a', '-F#{pane_id}']).find(pane) != -1:
